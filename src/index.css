@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,4 +10,17 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+} */
+
+
+/* @media screen and (max-width: 1023px) {
+.main__container{
+  display: flex !important;
+}
+
+} */
+
+.slider-container .slick-prev:before, .slick-next:before{
+  background-color: transparent !important;
+  color: black !important;
 }
