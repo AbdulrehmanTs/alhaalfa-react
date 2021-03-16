@@ -5941,13 +5941,8 @@ var _typeof =
             e.htmlExpr.test(e.options.nextArrow) &&
               e.$nextArrow.appendTo(e.options.appendArrows),
             !0 !== e.options.infinite &&
-              e.$prevArrow
-                .addClass('slick-disabled')
-                .attr('aria-disabled', 'true'))
-          : e.$prevArrow
-              .add(e.$nextArrow)
-              .addClass('slick-hidden')
-              .attr({ 'aria-disabled': 'true', tabindex: '-1' }));
+              e.$prevArrow.addClass('slick-disabled'))
+          : e.$prevArrow.add(e.$nextArrow).addClass('slick-hidden'));
     }),
     (e.prototype.buildDots = function () {
       var e,
@@ -6217,14 +6212,14 @@ var _typeof =
           t.$prevArrow.length &&
           (t.$prevArrow
             .removeClass('slick-disabled slick-arrow slick-hidden')
-            .removeAttr('aria-hidden aria-disabled tabindex')
+
             .css('display', ''),
           t.htmlExpr.test(t.options.prevArrow) && t.$prevArrow.remove()),
         t.$nextArrow &&
           t.$nextArrow.length &&
           (t.$nextArrow
             .removeClass('slick-disabled slick-arrow slick-hidden')
-            .removeAttr('aria-hidden aria-disabled tabindex')
+
             .css('display', ''),
           t.htmlExpr.test(t.options.nextArrow) && t.$nextArrow.remove()),
         t.$slides &&
@@ -7516,35 +7511,19 @@ var _typeof =
         !0 === i.options.arrows &&
           i.slideCount > i.options.slidesToShow &&
           !i.options.infinite &&
-          (i.$prevArrow
-            .removeClass('slick-disabled')
-            .attr('aria-disabled', 'false'),
-          i.$nextArrow
-            .removeClass('slick-disabled')
-            .attr('aria-disabled', 'false'),
-          0 === i.currentSlide
-            ? (i.$prevArrow
-                .addClass('slick-disabled')
-                .attr('aria-disabled', 'true'),
-              i.$nextArrow
-                .removeClass('slick-disabled')
-                .attr('aria-disabled', 'false'))
-            : i.currentSlide >= i.slideCount - i.options.slidesToShow &&
-              !1 === i.options.centerMode
-            ? (i.$nextArrow
-                .addClass('slick-disabled')
-                .attr('aria-disabled', 'true'),
-              i.$prevArrow
-                .removeClass('slick-disabled')
-                .attr('aria-disabled', 'false'))
-            : i.currentSlide >= i.slideCount - 1 &&
-              !0 === i.options.centerMode &&
-              (i.$nextArrow
-                .addClass('slick-disabled')
-                .attr('aria-disabled', 'true'),
-              i.$prevArrow
-                .removeClass('slick-disabled')
-                .attr('aria-disabled', 'false')));
+          i.$prevArrow.removeClass('slick-disabled'),
+        i.$nextArrow.removeClass('slick-disabled'),
+        0 === i.currentSlide
+          ? (i.$prevArrow.addClass('slick-disabled'),
+            i.$nextArrow.removeClass('slick-disabled'))
+          : i.currentSlide >= i.slideCount - i.options.slidesToShow &&
+            !1 === i.options.centerMode
+          ? (i.$nextArrow.addClass('slick-disabled'),
+            i.$prevArrow.removeClass('slick-disabled'))
+          : i.currentSlide >= i.slideCount - 1 &&
+            !0 === i.options.centerMode &&
+            (i.$nextArrow.addClass('slick-disabled'),
+            i.$prevArrow.removeClass('slick-disabled'));
     }),
     (e.prototype.updateDots = function () {
       var i = this;
@@ -7687,120 +7666,198 @@ var _typeof =
 /*  jQuery Nice Select - v1.0
     https://github.com/hernansartorio/jquery-nice-select
     Made by Hernán Sartorio  */
-!(function (e) {
-  e.fn.niceSelect = function (t) {
-    function s(t) {
-      t.after(
-        e('<div></div>')
+(function ($) {
+  $.fn.niceSelect = function (method) {
+    // Methods
+    if (typeof method == 'string') {
+      if (method == 'update') {
+        this.each(function () {
+          var $select = $(this);
+          var $dropdown = $(this).next('.nice-select');
+          var open = $dropdown.hasClass('open');
+
+          if ($dropdown.length) {
+            $dropdown.remove();
+            create_nice_select($select);
+
+            if (open) {
+              $select.next().trigger('click');
+            }
+          }
+        });
+      } else if (method == 'destroy') {
+        this.each(function () {
+          var $select = $(this);
+          var $dropdown = $(this).next('.nice-select');
+
+          if ($dropdown.length) {
+            $dropdown.remove();
+            $select.css('display', '');
+          }
+        });
+        if ($('.nice-select').length == 0) {
+          $(document).off('.nice_select');
+        }
+      } else {
+        console.log('Method "' + method + '" does not exist.');
+      }
+      return this;
+    }
+
+    // Hide native select
+    this.hide();
+
+    // Create custom markup
+    this.each(function () {
+      var $select = $(this);
+
+      if (!$select.next().hasClass('nice-select')) {
+        create_nice_select($select);
+      }
+    });
+
+    function create_nice_select($select) {
+      $select.after(
+        $('<div></div>')
           .addClass('nice-select')
-          .addClass(t.attr('class') || '')
-          .addClass(t.attr('disabled') ? 'disabled' : '')
-          .attr('tabindex', t.attr('disabled') ? null : '0')
+          .addClass($select.attr('class') || '')
+          .addClass($select.attr('disabled') ? 'disabled' : '')
+          .attr('tabindex', $select.attr('disabled') ? null : '0')
           .html('<span class="current"></span><ul class="list"></ul>')
       );
-      var s = t.next(),
-        n = t.find('option'),
-        i = t.find('option:selected');
-      s.find('.current').html(i.data('display') || i.text()),
-        n.each(function (t) {
-          var n = e(this),
-            i = n.data('display');
-          s.find('ul').append(
-            e('<li></li>')
-              .attr('data-value', n.val())
-              .attr('data-display', i || null)
-              .addClass(
-                'option' +
-                  (n.is(':selected') ? ' selected' : '') +
-                  (n.is(':disabled') ? ' disabled' : '')
-              )
-              .html(n.text())
-          );
-        });
-    }
-    if ('string' == typeof t)
-      return (
-        'update' == t
-          ? this.each(function () {
-              var t = e(this),
-                n = e(this).next('.nice-select'),
-                i = n.hasClass('open');
-              n.length && (n.remove(), s(t), i && t.next().trigger('click'));
-            })
-          : 'destroy' == t
-          ? (this.each(function () {
-              var t = e(this),
-                s = e(this).next('.nice-select');
-              s.length && (s.remove(), t.css('display', ''));
-            }),
-            0 == e('.nice-select').length && e(document).off('.nice_select'))
-          : console.log('Method "' + t + '" does not exist.'),
-        this
-      );
-    this.hide(),
-      this.each(function () {
-        var t = e(this);
-        t.next().hasClass('nice-select') || s(t);
-      }),
-      e(document).off('.nice_select'),
-      e(document).on('click.nice_select', '.nice-select', function (t) {
-        var s = e(this);
-        e('.nice-select').not(s).removeClass('open'),
-          s.toggleClass('open'),
-          s.hasClass('open')
-            ? (s.find('.option'),
-              s.find('.focus').removeClass('focus'),
-              s.find('.selected').addClass('focus'))
-            : s.focus();
-      }),
-      e(document).on('click.nice_select', function (t) {
-        0 === e(t.target).closest('.nice-select').length &&
-          e('.nice-select').removeClass('open').find('.option');
-      }),
-      e(document).on(
-        'click.nice_select',
-        '.nice-select .option:not(.disabled)',
-        function (t) {
-          var s = e(this),
-            n = s.closest('.nice-select');
-          n.find('.selected').removeClass('selected'), s.addClass('selected');
-          var i = s.data('display') || s.text();
-          n.find('.current').text(i),
-            n.prev('select').val(s.data('value')).trigger('change');
-        }
-      ),
-      e(document).on('keydown.nice_select', '.nice-select', function (t) {
-        var s = e(this),
-          n = e(s.find('.focus') || s.find('.list .option.selected'));
-        if (32 == t.keyCode || 13 == t.keyCode)
-          return (
-            s.hasClass('open') ? n.trigger('click') : s.trigger('click'), !1
-          );
-        if (40 == t.keyCode) {
-          if (s.hasClass('open')) {
-            var i = n.nextAll('.option:not(.disabled)').first();
-            i.length > 0 &&
-              (s.find('.focus').removeClass('focus'), i.addClass('focus'));
-          } else s.trigger('click');
-          return !1;
-        }
-        if (38 == t.keyCode) {
-          if (s.hasClass('open')) {
-            var l = n.prevAll('.option:not(.disabled)').first();
-            l.length > 0 &&
-              (s.find('.focus').removeClass('focus'), l.addClass('focus'));
-          } else s.trigger('click');
-          return !1;
-        }
-        if (27 == t.keyCode) s.hasClass('open') && s.trigger('click');
-        else if (9 == t.keyCode && s.hasClass('open')) return !1;
+
+      var $dropdown = $select.next();
+      var $options = $select.find('option');
+      var $selected = $select.find('option:selected');
+
+      $dropdown
+        .find('.current')
+        .html($selected.data('display') || $selected.text());
+
+      $options.each(function (i) {
+        var $option = $(this);
+        var display = $option.data('display');
+
+        $dropdown.find('ul').append(
+          $('<li></li>')
+            .attr('data-value', $option.val())
+            .attr('data-display', display || null)
+            .addClass(
+              'option' +
+                ($option.is(':selected') ? ' selected' : '') +
+                ($option.is(':disabled') ? ' disabled' : '')
+            )
+            .html($option.text())
+        );
       });
-    var n = document.createElement('a').style;
-    return (
-      (n.cssText = 'pointer-events:auto'),
-      'auto' !== n.pointerEvents && e('html').addClass('no-csspointerevents'),
-      this
+    }
+
+    /* Event listeners */
+
+    // Unbind existing events in case that the plugin has been initialized before
+    $(document).off('.nice_select');
+
+    // Open/close
+    $(document).on('click.nice_select', '.nice-select', function (event) {
+      var $dropdown = $(this);
+
+      $('.nice-select').not($dropdown).removeClass('open');
+      $dropdown.toggleClass('open');
+
+      if ($dropdown.hasClass('open')) {
+        $dropdown.find('.option');
+        $dropdown.find('.focus').removeClass('focus');
+        $dropdown.find('.selected').addClass('focus');
+      } else {
+        $dropdown.focus();
+      }
+    });
+
+    // Close when clicking outside
+    $(document).on('click.nice_select', function (event) {
+      if ($(event.target).closest('.nice-select').length === 0) {
+        $('.nice-select').removeClass('open').find('.option');
+      }
+    });
+
+    // Option click
+    $(document).on(
+      'click.nice_select',
+      '.nice-select .option:not(.disabled)',
+      function (event) {
+        var $option = $(this);
+        var $dropdown = $option.closest('.nice-select');
+
+        $dropdown.find('.selected').removeClass('selected');
+        $option.addClass('selected');
+
+        var text = $option.data('display') || $option.text();
+        $dropdown.find('.current').text(text);
+
+        $dropdown.prev('select').val($option.data('value')).trigger('change');
+      }
     );
+
+    // Keyboard events
+    $(document).on('keydown.nice_select', '.nice-select', function (event) {
+      var $dropdown = $(this);
+      var $focused_option = $(
+        $dropdown.find('.focus') || $dropdown.find('.list .option.selected')
+      );
+
+      // Space or Enter
+      if (event.keyCode == 32 || event.keyCode == 13) {
+        if ($dropdown.hasClass('open')) {
+          $focused_option.trigger('click');
+        } else {
+          $dropdown.trigger('click');
+        }
+        return false;
+        // Down
+      } else if (event.keyCode == 40) {
+        if (!$dropdown.hasClass('open')) {
+          $dropdown.trigger('click');
+        } else {
+          var $next = $focused_option.nextAll('.option:not(.disabled)').first();
+          if ($next.length > 0) {
+            $dropdown.find('.focus').removeClass('focus');
+            $next.addClass('focus');
+          }
+        }
+        return false;
+        // Up
+      } else if (event.keyCode == 38) {
+        if (!$dropdown.hasClass('open')) {
+          $dropdown.trigger('click');
+        } else {
+          var $prev = $focused_option.prevAll('.option:not(.disabled)').first();
+          if ($prev.length > 0) {
+            $dropdown.find('.focus').removeClass('focus');
+            $prev.addClass('focus');
+          }
+        }
+        return false;
+        // Esc
+      } else if (event.keyCode == 27) {
+        if ($dropdown.hasClass('open')) {
+          $dropdown.trigger('click');
+        }
+        // Tab
+      } else if (event.keyCode == 9) {
+        if ($dropdown.hasClass('open')) {
+          return false;
+        }
+      }
+    });
+
+    // Detect CSS pointer-events support, for IE <= 10. From Modernizr.
+    var style = document.createElement('a').style;
+    style.cssText = 'pointer-events:auto';
+    if (style.pointerEvents !== 'auto') {
+      $('html').addClass('no-csspointerevents');
+    }
+
+    return this;
   };
 })(jQuery);
 // jscs:disable

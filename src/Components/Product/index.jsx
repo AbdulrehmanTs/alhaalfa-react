@@ -6,6 +6,7 @@ import ProductDetails from '../ProductDetails';
 import SliderSection from './SliderSection';
 import Slider from 'react-slick';
 import ProductImages from './ProductImages';
+import $ from 'jquery';
 
 /**
  * @author
@@ -17,12 +18,16 @@ const Products = ({ product: { products }, location }) => {
     ? products.find((product) => product._id === location.query.id)
     : location.product;
 
+  const [productImage, setProductImage] = React.useState(
+    selectedProduct.imagePath[0]
+  );
+
   let prevArrow = (
       <button type="button" class="slick-prev">
         <svg class="icon icon-arrow-prev">
           <use
             xmlns="http://www.w3.org/1999/xlink"
-            xlinkHref=".img/sprite.svg#icon-arrow-prev"
+            xlinkHref="/img/sprite.svg#icon-arrow-prev"
           ></use>
         </svg>
       </button>
@@ -68,35 +73,34 @@ const Products = ({ product: { products }, location }) => {
   };
 
   React.useEffect(() => {
-    // $('.js-zoom').ezPlus({
-    //   gallery: 'gallery',
-    //   galleryActiveClass: 'active',
-    //   zoomWindowWidth: 504,
-    //   zoomWindowHeight: 504,
-    //   zoomWindowOffsetX: 50,
-    //   borderSize: '5',
-    //   borderColour: '#F6F7FB',
-    //   responsive: true,
-    //   respond: [
-    //     {
-    //       range: '768-1365',
-    //       zoomType: 'inner',
-    //       cursor: 'crosshair',
-    //       borderSize: '0',
-    //     },
-    //     {
-    //       range: '320-767',
-    //       enabled: false,
-    //       showLens: false,
-    //     },
-    //   ],
-    // });
-    // if (window.matchMedia('(max-width: 767px)').matches) {
-    //   $('.card__preview').on('click', function (e) {
-    //     e.preventDefault();
-    //   });
-    // }
-  }, []);
+    window.$('.js-zoom').ezPlus({
+      zoomWindowWidth: 504,
+      zoomWindowHeight: 504,
+      zoomWindowOffsetX: 50,
+      borderSize: '5',
+      borderColour: '#F6F7FB',
+      responsive: true,
+      respond: [
+        {
+          range: '768-1365',
+          zoomType: 'inner',
+          cursor: 'crosshair',
+          borderSize: '0',
+        },
+        {
+          range: '320-767',
+          enabled: false,
+          showLens: false,
+        },
+      ],
+    });
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      $('.card__preview').on('click', function (e) {
+        e.preventDefault();
+      });
+    }
+    window.$('select').niceSelect();
+  }, [productImage]);
 
   return (
     <>
@@ -105,26 +109,25 @@ const Products = ({ product: { products }, location }) => {
           <div className="card__row">
             <div className="card__col">
               <div className="card__gallery">
-                <div className="card__container" id="gallery">
+                <div className="card__container">
                   <Slider {...settings}>
                     {selectedProduct.imagePath.map((image) => (
-                      <ProductImages image={image} />
+                      <ProductImages
+                        image={image}
+                        productImage={productImage}
+                        setProductImage={setProductImage}
+                      />
                     ))}
                   </Slider>
                 </div>
                 <div className="card__wrap">
                   <div className="card__status card__status_sale">20% OFF</div>
-                  <div className="card__preview js-zoom">
+                  <div className="card__preview ">
                     <img
-                      style={{ width: '100%' }}
-                      className="card__pic"
-                      src={
-                        location.product
-                          ? location.product.imagePath[0]
-                          : selectedProduct.imagePath[0]
-                      }
+                      className="card__pic js-zoom"
+                      src={productImage}
                       alt=""
-                      // data-zoom-image={location.product.imagePath[0]}
+                      data-zoom-image={productImage}
                     />
                   </div>
                   <div className="card__icon">

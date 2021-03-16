@@ -2662,7 +2662,7 @@ body.dark .breadcrumbs__item:not(:last-child):after {
 
 .card__preview {
   display: block;
-  background: #f6f7fb;
+
   font-size: 0;
 }
 
@@ -6569,4 +6569,16 @@ body.dark .work__item {
   }
 }
 
-/*# sourceMappingURL=app.css.map */
+/* custom styles */
+
+.products__images__preview {
+  border: 2px solid #cccccc;
+  padding: 3px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.products__images__preview:hover {
+  border-color: #00cc96;
+}

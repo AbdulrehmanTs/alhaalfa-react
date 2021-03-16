@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ProductItem from './productItem';
 import $ from 'jquery';
-// import 'jquery-nice-select/js/jquery.nice-select';
 
 /**
  * @author
@@ -51,7 +50,7 @@ const Category = ({ product: { products }, location: { category } }) => {
       wrap.slideToggle();
     });
 
-    // $('select').niceSelect();
+    window.$('select').niceSelect();
   }, []);
 
   const [value, setValue] = React.useState('latest');
