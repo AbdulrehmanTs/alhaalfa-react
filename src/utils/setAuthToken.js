@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const setAuthToken = (token) => {
   if (token) {
-    axios.defaults.headers.authorization = token;
+    axios.defaults.headers.Authorization = token;
   } else {
-    delete axios.defaults.headers.authorization;
+    delete axios.defaults.headers.Authorization;
   }
 };
 

@@ -78,9 +78,11 @@ const BrowseByCat = ({ categories, loading }) => {
         <h2 class="categories__title title title_mb-lg">Browse by Category</h2>
         <div class="categories__container">
           <Slider {...settings}>
-            {categories.map((category) => (
-              <CategoriesItem category={category} key={category._id} />
-            ))}
+            {categories &&
+              categories.length > 0 &&
+              categories.map((category) => (
+                <CategoriesItem category={category} key={category._id} />
+              ))}
           </Slider>
         </div>
       </div>

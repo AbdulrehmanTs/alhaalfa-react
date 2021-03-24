@@ -36,9 +36,13 @@ const ExploreOurProducts = ({ products, loading, addToCart }) => {
             </div>
           </div> */}
 
-          {products.slice(0, 7).map((product) => (
-            <ProductItem product={product} key={product._id} />
-          ))}
+          {products &&
+            products.length > 0 &&
+            products
+              .slice(0, 7)
+              .map((product) => (
+                <ProductItem product={product} key={product._id} />
+              ))}
         </div>
         <div class="products__btns">
           <Link

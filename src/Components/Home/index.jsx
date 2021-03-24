@@ -7,6 +7,7 @@ import Blog from '../Blog';
 import { connect } from 'react-redux';
 import { getProducts } from '../../redux/actions/productActions';
 import { getCategories } from '../../redux/actions/categoryActions';
+import { loadUser } from '../../redux/actions/authActions';
 
 /**
  * @author
@@ -18,8 +19,13 @@ const Home = ({
   category: { categories, categoryLoading },
   getProducts,
   getCategories,
+  loadUser,
 }) => {
   useEffect(() => {
+    if (localStorage.token) {
+      loadUser(localStorage.token);
+    }
+
     getProducts();
     getCategories();
   }, []);
@@ -40,4 +46,8 @@ const mapStateToProps = (state) => ({
   category: state.category,
 });
 
-export default connect(mapStateToProps, { getProducts, getCategories })(Home);
+export default connect(mapStateToProps, {
+  getProducts,
+  getCategories,
+  loadUser,
+})(Home);

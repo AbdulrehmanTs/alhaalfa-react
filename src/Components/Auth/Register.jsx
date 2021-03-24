@@ -1,12 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { signUp } from '../../redux/actions/authActions';
 
 /**
  * @author
  * @function Register
  **/
 
-const Register = (props) => {
+const Register = ({ signUp }) => {
+  const [user, setUser] = React.useState({
+    username: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+  });
+
+  const { username, first_name, last_name, email, password } = user;
+
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log(username, first_name, last_name, email, password);
+    if (!username || !first_name || !last_name || !email || !password) {
+      console.log('Please enter all fields');
+    } else if (password.length < 6) {
+      console.log('Password should be of atleast 6 characters');
+    } else {
+      signUp({
+        username,
+        first_name,
+        last_name,
+        email,
+        password,
+      });
+    }
+  };
+
   return (
     <>
       <div class="breadcrumbs">
@@ -31,20 +63,56 @@ const Register = (props) => {
           <div class="login__center center">
             <div class="login__stage stage">- Sign Up</div>
             <h2 class="login__title title title_mb-lg">Create Account</h2>
-            <form class="login__form">
+            <form class="login__form" onSubmit={onSubmit}>
               <div class="login__wrap">
                 <div class="login__status success"></div>
 
                 <div class="login__field field">
                   <div class="field__label">Username</div>
                   <div class="field__wrap">
-                    <input class="field__input" type="text" name="address" />
+                    <input
+                      class="field__input"
+                      type="text"
+                      name="username"
+                      value={username}
+                      onChange={onChange}
+                    />
+                  </div>
+                </div>
+                <div class="login__field field">
+                  <div class="field__label">First Name</div>
+                  <div class="field__wrap">
+                    <input
+                      class="field__input"
+                      type="text"
+                      name="first_name"
+                      value={first_name}
+                      onChange={onChange}
+                    />
+                  </div>
+                </div>
+                <div class="login__field field">
+                  <div class="field__label">Last Name</div>
+                  <div class="field__wrap">
+                    <input
+                      class="field__input"
+                      type="text"
+                      name="last_name"
+                      value={last_name}
+                      onChange={onChange}
+                    />
                   </div>
                 </div>
                 <div class="login__field field">
                   <div class="field__label">Email Address</div>
                   <div class="field__wrap">
-                    <input class="field__input" type="text" name="address" />
+                    <input
+                      class="field__input"
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={onChange}
+                    />
                   </div>
                 </div>
                 <div class="login__field field">
@@ -54,6 +122,8 @@ const Register = (props) => {
                       class="field__input"
                       type="password"
                       name="password"
+                      value={password}
+                      onChange={onChange}
                     />
                   </div>
                 </div>
@@ -76,7 +146,10 @@ const Register = (props) => {
               </label>
               <div class="login__row">
                 <div class="login__col">
-                  <button class="login__btn btn btn_green btn_wide">
+                  <button
+                    type="submit"
+                    class="login__btn btn btn_green btn_wide"
+                  >
                     Create Account{' '}
                   </button>
                 </div>
@@ -94,4 +167,4 @@ const Register = (props) => {
   );
 };
 
-export default Register;
+export default connect(null, { signUp })(Register);

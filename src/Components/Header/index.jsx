@@ -2,13 +2,16 @@ import React from 'react';
 import $ from 'jquery';
 import { NavLink, Link } from 'react-router-dom';
 import Cart from './cart';
+import UserInfo from './user-info';
+import { connect } from 'react-redux';
+import { logout } from '../../redux/actions/authActions';
 
 /**
  * @author
  * @function Header
  **/
 
-const Header = ({}) => {
+const Header = ({ auth: { user }, logout }) => {
   React.useEffect(() => {
     var search = $('.js-search');
     let btn = search.find('.js-search-btn');
@@ -115,11 +118,15 @@ const Header = ({}) => {
             </div>
           </div>
           <div class="header__item header__item_hidden">
-            <Link class="header__link" to="/login">
+            <a class="header__link" href="">
               <svg class="icon icon-user">
                 <use xlinkHref="img/sprite.svg#icon-user"></use>
               </svg>
-            </Link>
+            </a>
+
+            <div class="header__body">
+              <UserInfo user={user} logout={logout} />
+            </div>
           </div>
         </div>
       </div>
@@ -137,6 +144,19 @@ const Header = ({}) => {
           </form>
           <div class="menu__container">
             <div class="menu__list js-menu-list">
+              {user && (
+                <Link
+                  class="menu__item js-menu-close"
+                  to="/me"
+                  style={{ display: 'flex', alignItems: 'center' }}
+                >
+                  <img src="img/product-1.png" alt="" className="user-img" />
+                  <p style={{ marginLeft: '10px' }}>
+                    {user && user.first_name} {user && user.last_name}
+                  </p>
+                </Link>
+              )}
+
               <Link class="menu__item active js-menu-close" to="/">
                 Home
               </Link>
@@ -206,6 +226,39 @@ const Header = ({}) => {
                   </span>
                 </span>
               </label>
+              {user ? (
+                <div class="login__row" style={{ marginTop: '8px' }}>
+                  <div class="login__col">
+                    <button
+                      class="login__btn btn btn_green btn_wide js-menu-close"
+                      onClick={() => {
+                        logout();
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div class="login__row no-user">
+                  <div class="login__col">
+                    <Link to="/register">
+                      <button class="login__btn btn btn_green btn_wide js-menu-close">
+                        Create Account
+                      </button>
+                    </Link>
+                  </div>
+                  <p>OR</p>
+                  <div class="login__col">
+                    <Link
+                      class="login__btn btn btn_border btn_wide js-menu-close"
+                      to="/login"
+                    >
+                      Login
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -214,4 +267,8 @@ const Header = ({}) => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, { logout })(Header);

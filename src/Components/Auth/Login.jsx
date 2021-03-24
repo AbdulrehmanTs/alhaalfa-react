@@ -1,12 +1,44 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { login } from '../../redux/actions/authActions';
 
 /**
  * @author
  * @function Login
  **/
 
-const Login = (props) => {
+const Login = ({ auth: { isAuthenticated }, login }) => {
+  const history = useHistory();
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/');
+    }
+  }, [isAuthenticated]);
+
+  const [user, setUser] = React.useState({
+    email: '',
+    password: '',
+  });
+
+  const { email, password } = user;
+
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      console.log('Please enter all fields');
+    } else {
+      login({
+        email,
+        password,
+      });
+    }
+  };
+
   return (
     <>
       <div class="breadcrumbs">
@@ -34,17 +66,29 @@ const Login = (props) => {
               Login to Your <br />
               Account
             </h2>
-            <form class="login__form">
+            <form class="login__form" onSubmit={onSubmit}>
               <div class="login__field field">
                 <div class="field__label">Email Address</div>
                 <div class="field__wrap">
-                  <input class="field__input" type="text" name="address" />
+                  <input
+                    class="field__input"
+                    type="text"
+                    name="email"
+                    value={email}
+                    onChange={onChange}
+                  />
                 </div>
               </div>
               <div class="login__field field">
                 <div class="field__label">Password</div>
                 <div class="field__wrap">
-                  <input class="field__input" type="password" name="password" />
+                  <input
+                    class="field__input"
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={onChange}
+                  />
                 </div>
               </div>
               <label class="login__checkbox checkbox">
@@ -59,7 +103,9 @@ const Login = (props) => {
                 </span>
               </label>
               <div class="login__btns">
-                <button class="login__btn btn btn_green btn_wide">Login</button>
+                <button class="login__btn btn btn_green btn_wide" type="submit">
+                  Login
+                </button>
               </div>
               <div class="login__row">
                 <div class="login__col">
@@ -84,4 +130,8 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, { login })(Login);

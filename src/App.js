@@ -25,7 +25,13 @@ import Checkout from './Components/Checkout';
 import Product from './Components/Product';
 import Search from './Components/Search';
 
+import setAuthToken from './utils/setAuthToken';
+
 function App() {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
   return (
     <Provider store={store}>
       <Router>

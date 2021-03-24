@@ -6,7 +6,7 @@ export const getCategories = () => async (dispatch) => {
   try {
     setLoading();
 
-    const res = await fetch('http://localhost:5000/category');
+    const res = await fetch('http://localhost:19000/api/category/list');
     const data = await res.json();
 
     dispatch({

@@ -6,7 +6,7 @@ export const getProducts = () => async (dispatch) => {
   try {
     setLoading();
 
-    const res = await fetch('http://localhost:5000/product');
+    const res = await fetch('http://localhost:19000/api/product/list');
     const data = await res.json();
 
     dispatch({
