@@ -30,14 +30,20 @@ const UserInfo = ({ user, logout }) => {
           <div class="basket__text">
             <Link to="/me" className="user-info">
               <img src="img/product-1.png" alt="" className="user-img" />
-              <p>
-                {user && user.first_name} {user && user.last_name}
+              <p style={{ display: 'flex', alignItems: 'center' }}>
+                {user && user.first_name} {user && user.last_name}{' '}
               </p>
+              <p className="user-status">{user.status}</p>
             </Link>
 
             <Link to="/order-history" className="user-info user-settings">
               <img src="img/history.svg" alt="" className="user-icon" />
               <p>Order History</p>
+            </Link>
+
+            <Link to="/my-wallet" className="user-info user-settings">
+              <img src="img/wallet.svg" alt="" className="user-icon" />
+              <p>{`RM${user.wallet_balance}`}</p>
             </Link>
 
             <a

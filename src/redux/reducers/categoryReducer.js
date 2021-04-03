@@ -15,7 +15,7 @@ export default (state = initialState, action) => {
     case GET_CATEGORIES:
       return {
         ...state,
-        categories: action.payload,
+        categories: action.payload.categories,
         categoryLoading: false,
       };
     case CATEGORIES_ERROR:

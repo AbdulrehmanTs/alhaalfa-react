@@ -21,7 +21,7 @@ const Cart = ({
             <div class="basket__list" key={item._id}>
               <div class="basket__item">
                 <a class="basket__preview" href="#">
-                  <img class="basket__pic" src={item.imagePath[0]} alt="" />
+                  <img class="basket__pic" src={item.imageUrl[0]} alt="" />
                 </a>
                 <div class="basket__details">
                   <a class="basket__product" href="#">

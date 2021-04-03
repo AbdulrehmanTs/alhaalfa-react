@@ -41,7 +41,7 @@ const CartProducts = ({
         class="cart__preview"
         to={{ pathname: `/product/${item._id}`, query: { id: item._id } }}
       >
-        <img class="cart__pic" src={item.imagePath[0]} alt="" />
+        <img class="cart__pic" src={item.imageUrl[0]} alt="" />
       </Link>
       <div class="cart__details">
         <a class="cart__product" href="#">

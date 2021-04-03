@@ -1,14 +1,53 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { signUp } from '../../redux/actions/authActions';
+import {
+  signUp,
+  clearErrors,
+  setLoading,
+} from '../../redux/actions/authActions';
+import AlertMessage from '../../utils/AlertMessage';
 
 /**
  * @author
  * @function Register
  **/
 
-const Register = ({ signUp }) => {
+const Register = ({
+  auth: { isAuthenticated, error },
+  signUp,
+  clearErrors,
+  setLoading,
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+  const [severity, setSeverity] = React.useState('');
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const history = useHistory();
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/');
+    }
+  }, [isAuthenticated]);
+
+  React.useEffect(() => {
+    if (error) {
+      setOpen(true);
+      setSeverity('error');
+      setMessage(error);
+      clearErrors();
+    }
+  }, [error]);
+
   const [user, setUser] = React.useState({
     username: '',
     first_name: '',
@@ -25,10 +64,13 @@ const Register = ({ signUp }) => {
     e.preventDefault();
     console.log(username, first_name, last_name, email, password);
     if (!username || !first_name || !last_name || !email || !password) {
-      console.log('Please enter all fields');
-    } else if (password.length < 6) {
-      console.log('Password should be of atleast 6 characters');
+      setOpen(true);
+      setSeverity('error');
+      setMessage('Please enter all fields');
+    } else if (error) {
+      return;
     } else {
+      setLoading();
       signUp({
         username,
         first_name,
@@ -41,23 +83,6 @@ const Register = ({ signUp }) => {
 
   return (
     <>
-      <div class="breadcrumbs">
-        <div class="breadcrumbs__center center">
-          <ul class="breadcrumbs__list">
-            <li class="breadcrumbs__item">
-              <Link class="breadcrumbs__link" to="/">
-                Home Page
-              </Link>
-            </li>
-            <li class="breadcrumbs__item">
-              <Link class="breadcrumbs__link" to="/category">
-                Categories
-              </Link>
-            </li>
-            <li class="breadcrumbs__item">Sign Up</li>
-          </ul>
-        </div>
-      </div>
       <div class="login section">
         <div class="login__details">
           <div class="login__center center">
@@ -79,30 +104,37 @@ const Register = ({ signUp }) => {
                     />
                   </div>
                 </div>
-                <div class="login__field field">
-                  <div class="field__label">First Name</div>
-                  <div class="field__wrap">
-                    <input
-                      class="field__input"
-                      type="text"
-                      name="first_name"
-                      value={first_name}
-                      onChange={onChange}
-                    />
+                <div style={{ display: 'flex' }}>
+                  <div
+                    class="login__field field"
+                    style={{ marginRight: '10px', width: '50%' }}
+                  >
+                    <div class="field__label">First Name</div>
+                    <div class="field__wrap">
+                      <input
+                        class="field__input"
+                        type="text"
+                        name="first_name"
+                        value={first_name}
+                        onChange={onChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div class="login__field field" style={{ width: '50%' }}>
+                    <div class="field__label">Last Name</div>
+                    <div class="field__wrap">
+                      <input
+                        class="field__input"
+                        type="text"
+                        name="last_name"
+                        value={last_name}
+                        onChange={onChange}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div class="login__field field">
-                  <div class="field__label">Last Name</div>
-                  <div class="field__wrap">
-                    <input
-                      class="field__input"
-                      type="text"
-                      name="last_name"
-                      value={last_name}
-                      onChange={onChange}
-                    />
-                  </div>
-                </div>
+
                 <div class="login__field field">
                   <div class="field__label">Email Address</div>
                   <div class="field__wrap">
@@ -163,8 +195,20 @@ const Register = ({ signUp }) => {
           </div>
         </div>
       </div>
+      <AlertMessage
+        message={message}
+        severity={severity}
+        open={open}
+        handleClose={handleClose}
+      />
     </>
   );
 };
 
-export default connect(null, { signUp })(Register);
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, { signUp, clearErrors, setLoading })(
+  Register
+);
