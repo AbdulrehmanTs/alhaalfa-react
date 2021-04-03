@@ -19,7 +19,7 @@ const Products = ({ product: { products }, location }) => {
     : location.product;
 
   const [productImage, setProductImage] = React.useState(
-    selectedProduct.imagePath[0]
+    selectedProduct.imageUrl[0]
   );
 
   let prevArrow = (
@@ -111,7 +111,7 @@ const Products = ({ product: { products }, location }) => {
               <div className="card__gallery">
                 <div className="card__container">
                   <Slider {...settings}>
-                    {selectedProduct.imagePath.map((image) => (
+                    {selectedProduct.imageUrl.map((image) => (
                       <ProductImages
                         image={image}
                         productImage={productImage}

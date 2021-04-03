@@ -2,16 +2,23 @@ import {
   SIGNUP,
   LOGIN,
   LOGOUT,
-  AUTH_ERROR,
   USER_LOADED,
+  FORGOT_PASSWORD,
+  RESET_PASSWORD,
+  UPDATE_INFO,
+  AUTH_ERROR,
+  CLEAR_ERRORS,
+  CLEAR_RESPONSE_MESSAGE,
+  SET_LOADING,
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
-  isAuthenticated: null,
+  isAuthenticated: false,
   user: null,
-  loading: true,
+  loading: false,
   error: null,
+  responseMessage: null,
 };
 
 export default (state = initialState, action) => {
@@ -32,6 +39,18 @@ export default (state = initialState, action) => {
         isAuthenticated: true,
         loading: false,
       };
+    case FORGOT_PASSWORD:
+    case RESET_PASSWORD:
+      return {
+        ...state,
+        responseMessage: action.payload.message,
+      };
+    case UPDATE_INFO:
+      return {
+        ...state,
+        user: action.payload.user,
+        responseMessage: action.payload.message,
+      };
     case LOGOUT:
     case AUTH_ERROR:
       localStorage.removeItem('token');
@@ -42,6 +61,21 @@ export default (state = initialState, action) => {
         loading: false,
         user: null,
         error: action.payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
+    case CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        responseMessage: null,
       };
     default:
       return state;

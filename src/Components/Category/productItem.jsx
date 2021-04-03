@@ -24,7 +24,7 @@ const ProductItem = ({
             query: { id: product._id },
           }}
         >
-          <img class="product__pic" src={product.imagePath[0]} alt="" />
+          <img class="product__pic" src={product.imageUrl[0]} alt="" />
         </Link>
         {cart.find((item) => item._id === product._id) ? (
           <Link class="product__btn btn btn_green" to="/cart">

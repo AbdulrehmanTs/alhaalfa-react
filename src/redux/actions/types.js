@@ -3,6 +3,9 @@ export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const USER_LOADED = 'USER_LOADED';
+export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
+export const RESET_PASSWORD = 'RESET_PASSWORD';
+export const UPDATE_INFO = 'UPDATE_INFO';
 export const AUTH_ERROR = 'AUTH_ERROR';
 
 // Products
@@ -24,3 +27,9 @@ export const CLEAR_CART = 'CLEAR_CART';
 
 // Loading
 export const SET_LOADING = 'SET_LOADING';
+
+// Clear Errors
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';
+
+// Clear Response Message
+export const CLEAR_RESPONSE_MESSAGE = 'CLEAR_RESPONSE_MESSAGE';

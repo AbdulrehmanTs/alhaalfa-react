@@ -89,6 +89,7 @@ video {
 html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 img,
@@ -6597,6 +6598,7 @@ body.dark .work__item {
 
 .user-info p {
   margin-left: 10px;
+  margin-bottom: 0px;
   color: #000;
 }
 
@@ -6620,4 +6622,12 @@ body.dark .work__item {
 
 .no-user p {
   margin: 0px 6px;
+}
+
+.user-status {
+  background: #00d099;
+  color: #fff !important;
+  padding: 2px;
+  border-radius: 2px;
+  font-size: 17px;
 }

@@ -1,0 +1,107 @@
+.order-details {
+  font-weight: bold;
+}
+
+table {
+  border: 1px solid #ebebeb;
+}
+
+th {
+  padding: 10px;
+  background-color: #00cc96;
+  color: #fff;
+  border-bottom: 1px solid #ebebeb;
+}
+
+td {
+  padding: 10px;
+  border-right: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  text-align: center;
+}
+
+@media only screen and (min-width: 1024px) {
+}
+
+@media only screen and (max-width: 768px) {
+  table {
+    border: none;
+  }
+
+  tr {
+    margin-top: 10px;
+    border: 1px solid #ebebeb;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: left;
+  }
+
+  th {
+    font-weight: 900;
+  }
+
+  td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    left: 6px;
+    width: 45%;
+    white-space: nowrap;
+  }
+
+  td:nth-of-type(1):before {
+    content: 'Order Name:';
+  }
+  td:nth-of-type(2):before {
+    content: 'Order Amount:';
+  }
+  td:nth-of-type(3):before {
+    content: 'Order Date:';
+  }
+  td:nth-of-type(4):before {
+    content: 'Payment Status:';
+  }
+  td:nth-of-type(5):before {
+    content: 'Order Status:';
+  }
+}
+
+@media only screen and (max-width: 1365px) {
+}
+
+@media only screen and (max-width: 1279px) {
+}
+
+@media only screen and (max-width: 1199px) {
+}
+
+@media only screen and (max-width: 1023px) {
+}
+
+@media only screen and (max-width: 767px) {
+}
+
+@media only screen and (max-width: 639px) {
+}

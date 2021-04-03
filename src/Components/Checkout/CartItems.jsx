@@ -10,7 +10,7 @@ const CartItems = ({ item, removeFromCart, calTotalItems, totals }) => {
   return (
     <div className="basket__item">
       <div className="basket__preview">
-        <img className="basket__pic" src={item.imagePath[0]} alt="" />
+        <img className="basket__pic" src={item.imageUrl[0]} alt="" />
       </div>
       <div className="basket__details">
         <div className="basket__product">{item.name}</div>

@@ -1,14 +1,36 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { login } from '../../redux/actions/authActions';
+import {
+  login,
+  clearErrors,
+  setLoading,
+} from '../../redux/actions/authActions';
+import AlertMessage from '../../utils/AlertMessage';
 
 /**
  * @author
  * @function Login
  **/
 
-const Login = ({ auth: { isAuthenticated }, login }) => {
+const Login = ({
+  auth: { isAuthenticated, error },
+  login,
+  clearErrors,
+  setLoading,
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+  const [severity, setSeverity] = React.useState('');
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const history = useHistory();
 
   React.useEffect(() => {
@@ -16,6 +38,15 @@ const Login = ({ auth: { isAuthenticated }, login }) => {
       history.push('/');
     }
   }, [isAuthenticated]);
+
+  React.useEffect(() => {
+    if (error) {
+      setOpen(true);
+      setSeverity('error');
+      setMessage(error);
+      clearErrors();
+    }
+  }, [error]);
 
   const [user, setUser] = React.useState({
     email: '',
@@ -30,8 +61,13 @@ const Login = ({ auth: { isAuthenticated }, login }) => {
     e.preventDefault();
 
     if (!email || !password) {
-      console.log('Please enter all fields');
+      setOpen(true);
+      setSeverity('error');
+      setMessage('Please enter your Email and Password');
+    } else if (error) {
+      return;
     } else {
+      setLoading();
       login({
         email,
         password,
@@ -41,23 +77,6 @@ const Login = ({ auth: { isAuthenticated }, login }) => {
 
   return (
     <>
-      <div class="breadcrumbs">
-        <div class="breadcrumbs__center center">
-          <ul class="breadcrumbs__list">
-            <li class="breadcrumbs__item">
-              <Link class="breadcrumbs__link" to="/">
-                Home Page
-              </Link>
-            </li>
-            <li class="breadcrumbs__item">
-              <Link class="breadcrumbs__link" to="/category">
-                Categories
-              </Link>
-            </li>
-            <li class="breadcrumbs__item">Login</li>
-          </ul>
-        </div>
-      </div>
       <div class="login section">
         <div class="login__details">
           <div class="login__center center">
@@ -117,15 +136,21 @@ const Login = ({ auth: { isAuthenticated }, login }) => {
                   </Link>
                 </div>
                 <div class="login__col">
-                  <a class="login__link" href="#">
+                  <Link class="login__link" to="/forgot-password">
                     Forgot Password?
-                  </a>
+                  </Link>
                 </div>
               </div>
             </form>
           </div>
         </div>
       </div>
+      <AlertMessage
+        message={message}
+        severity={severity}
+        open={open}
+        handleClose={handleClose}
+      />
     </>
   );
 };
@@ -134,4 +159,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, clearErrors, setLoading })(
+  Login
+);
